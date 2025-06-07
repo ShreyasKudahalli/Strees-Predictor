@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Employee Stress Prediction</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page-wrapper">
+    <div class="form-card">
+      <h1>🧠 Predict Your Stress Level</h1>
+      <p class="subtitle">Fill out the form below to estimate your workplace stress level.</p>
+
+      <form method="POST">
+        <div class="form-grid">
+          {% for field in [
+              ['working_hours', 'Working Hours / Day', 'number'],
+              ['work_pressure', 'Work Pressure (1-5)', 'number'],
+              ['manager_support', 'Manager Support (1-5)', 'number'],
+              ['sleeping_habit', 'Sleep Quality (1-5)', 'number'],
+              ['exercise_habit', 'Exercise Habit (1-5)', 'number'],
+              ['job_satisfaction', 'Job Satisfaction (1-5)', 'number'],
+              ['social_person', 'Social Personality (1-5)', 'number']
+            ] %}
+            <div class="form-group">
+              <label for="{{ field[0] }}">{{ field[1] }}</label>
+              <input type="{{ field[2] }}" name="{{ field[0] }}" id="{{ field[0] }}" min="1" max="5" step="0.1" required>
+            </div>
+          {% endfor %}
+
+          {% for select in [
+              ['work_from', 'Work From', ['Home', 'Office', 'Hybrid']],
+              ['work_life_balance', 'Work-Life Balance', ['Yes', 'No']],
+              ['lives_with_family', 'Lives with Family', ['Yes', 'No']],
+              ['working_state', 'Working State', ['Karnataka', 'Pune', 'Delhi', 'Hyderabad', 'Chennai']]
+            ] %}
+            <div class="form-group">
+              <label for="{{ select[0] }}">{{ select[1] }}</label>
+              <select name="{{ select[0] }}" id="{{ select[0] }}" required>
+                {% for option in select[2] %}
+                <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="form-actions">
+          <button type="submit">🔍 Predict Now</button>
+        </div>
+      </form>
+
+      {% if prediction is not none %}
+      <div class="result-card">
+        <h2>Predicted Stress Level: <span>{{ prediction }}</span></h2>
+        <p class="note">(1 = Lowest Stress, 5 = Highest Stress)</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>
